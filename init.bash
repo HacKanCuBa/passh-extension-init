@@ -66,7 +66,7 @@ cmd_init() {
 	#local passh_init="$(sed -nE "/^(function)?\s?cmd_init\(\)/,/^}/p" "$(which passh)")"
 	#passh_init="passh_cmd_init${passh_init#cmd_init}"
 	#eval "$passh_init"
-	pass_cmd_init $([[ -n "$st_path" ]] && echo "-p $st_path") "$gpg_id"
+	pass_cmd_init "$([[ -n "$st_path" ]] && echo "-p $st_path")" "$gpg_id"
 	mkdir -p "$EXTENSIONS" > /dev/null 2>&1
 	
 	if [[ $git -eq 1 ]]; then
