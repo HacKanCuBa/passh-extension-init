@@ -45,7 +45,7 @@ cmd_init_usage() {
 override_function cmd_init
 
 cmd_init() {
-	local opts sign=0 st_path="" git=0 gpg_id=""
+	local opts sign=0 st_path="" git=0
 	opts="$($GETOPT -o pgs -l path,git,sign -n "$PROGRAM" -- "$@")"
 	local err=$?
 	eval set -- "$opts"
@@ -58,15 +58,23 @@ cmd_init() {
 
 	[[ $err -ne 0 || $# -lt 1 || $# -gt 5 ]] && die "Usage: $PROGRAM $COMMAND [--help,-h] [--path=subfolder,-p subfolder] [--git,-g] [--sign,-s] gpg-id"
 	
-	gpg_id="$1"
+	local -a gpg_id
+	gpg_id=( $@ )
 
-	[[ $sign -eq 1 ]] && export PASSWORD_STORE_SIGNING_KEY="$gpg_id"
+	[[ $sign -eq 1 ]] && export PASSWORD_STORE_SIGNING_KEY="${gpg_id[0]}"
 
 	# Init passh
 	#local passh_init="$(sed -nE "/^(function)?\s?cmd_init\(\)/,/^}/p" "$(which passh)")"
 	#passh_init="passh_cmd_init${passh_init#cmd_init}"
 	#eval "$passh_init"
-	pass_cmd_init "$([[ -n "$st_path" ]] && echo "-p $st_path")" "$gpg_id"
+	for id in "${gpg_id[@]}"; do
+		$GPG -k "$id" > /dev/null || die "GPG-ID '$id' not found"
+	done
+	if [[ -n "$st_path" ]]; then 
+		pass_cmd_init -p "$st_path" "${gpg_id[@]}"
+	else
+		pass_cmd_init "${gpg_id[@]}"
+	fi
 	mkdir -p "$EXTENSIONS" > /dev/null 2>&1
 	
 	if [[ $git -eq 1 ]]; then
