@@ -39,7 +39,7 @@ Check the [releases](https://github.com/HacKanCuBa/passh-extension-init/releases
 ### Linux
 
 		git clone https://github.com/hackan/passh-extension-init.git
-		cd passh-init
+		cd passh-extension-init
 		sudo make install
 
 Or simply copy *init.bash* to the pass extension directory (~/.password-store/.extensions by default) and set it executable to enable it: `chmod +x init.bash`.
@@ -47,9 +47,9 @@ Or simply copy *init.bash* to the pass extension directory (~/.password-store/.e
 #### Requirements
 
 In order to use extension with `passh`, you need:
-* `passh 1.7.0` or greater. Check the [website](https://passh.hackan.net) on how to obtain it.
 
-* You need to enable the extensions in pass: `PASSWORD_STORE_ENABLE_EXTENSIONS=true passh`.
+* `passh 1.7.0` or greater. Check the [website](https://passh.hackan.net) on how to obtain it.  
+* You need to enable the extensions in passh: `PASSWORD_STORE_ENABLE_EXTENSIONS=true passh`.  
 You can create an alias in `.bashrc`: `alias passh='PASSWORD_STORE_ENABLE_EXTENSIONS=true passh'`
 
 ## Contribution
