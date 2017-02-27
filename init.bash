@@ -78,26 +78,29 @@ cmd_init() {
 	mkdir -p "$EXTENSIONS" > /dev/null 2>&1
 	
 	if [[ $git -eq 1 ]]; then
+		set_git "$PREFIX/"
+		INNER_GIT_DIR="$PREFIX"
+
 		# Init git
-		git init || die "Initializing git failed"
+		git -C "$INNER_GIT_DIR" init || die "Initializing git failed"
 
 		# Enable commit signing if key set
 		if [[ -n "$PASSWORD_STORE_SIGNING_KEY" ]]; then
 			for fingerprint in $PASSWORD_STORE_SIGNING_KEY; do
-				git config --local --add user.signingkey "$fingerprint"
+				git -C "$INNER_GIT_DIR" config --local --add user.signingkey "$fingerprint"
 				# git can't have more than one signing key.
 				# you can set several, but only the last one is used.
 				break
 			done
-			git config --local --bool --add pass.signcommits true
+			git -C "$INNER_GIT_DIR"  config --local --bool --add pass.signcommits true
 		fi
-	
+
 		git_add_file "$PREFIX" "Add current contents of password store."
 
 		echo '*.gpg diff=gpg' > "$PREFIX/.gitattributes"
 		git_add_file "$PREFIX/.gitattributes" "Configure git repository for gpg file diff."
-		git config --local diff.gpg.binary true
-		git config --local diff.gpg.textconv "$GPG -d ${GPG_OPTS[*]}"
+		git -C "$INNER_GIT_DIR" config --local diff.gpg.binary true
+		git -C "$INNER_GIT_DIR" config --local diff.gpg.textconv "$GPG -d ${GPG_OPTS[*]}"
 	fi
 }
 
