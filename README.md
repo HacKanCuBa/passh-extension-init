@@ -48,7 +48,7 @@ Or simply copy *init.bash* to the pass extension directory (~/.password-store/.e
 
 In order to use extension with `passh`, you need:
 
-* `passh 1.7.0` or greater. Check the [website](https://passh.hackan.net) on how to obtain it.  
+* `passh v1.7.1` or greater. Check the [website](https://passh.hackan.net) on how to obtain it.  
 * You need to enable the extensions in passh: `PASSWORD_STORE_ENABLE_EXTENSIONS=true passh`.  
 You can create an alias in `.bashrc`: `alias passh='PASSWORD_STORE_ENABLE_EXTENSIONS=true passh'`
 
