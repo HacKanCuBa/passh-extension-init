@@ -18,7 +18,7 @@
 
 help_init() {
 	cat <<-_EOF
-	    $PROGRAM init [--path=subfolder,-p subfolder] [--git,-g] [--sign,-s] gpg-id
+	    [--path=subfolder,-p subfolder] [--git,-g] [--sign,-s] gpg-id
 	        Initialize new password storage and use gpg-id for encryption.
 	        Selectively reencrypt existing passwords using new gpg-id.
 	        Additionally, --git or -g initializes the git repository (same as 
@@ -35,10 +35,11 @@ help_init() {
 
 cmd_init_usage() {
 	cat <<-_EOF
-	Usage:
-	$(help_init)
-	        
-	More information may be found in the passh-init(1) man page.
+		Usage:
+		    $PROGRAM init
+			$(help_init)
+
+		More information may be found in the passh-init(1) man page.
 	_EOF
 }
 
@@ -63,10 +64,6 @@ cmd_init() {
 
 	[[ $sign -eq 1 ]] && export PASSWORD_STORE_SIGNING_KEY="${gpg_id[0]}"
 
-	# Init passh
-	#local passh_init="$(sed -nE "/^(function)?\s?cmd_init\(\)/,/^}/p" "$(which passh)")"
-	#passh_init="passh_cmd_init${passh_init#cmd_init}"
-	#eval "$passh_init"
 	for id in "${gpg_id[@]}"; do
 		$GPG -k "$id" > /dev/null || die "GPG-ID '$id' not found"
 	done
